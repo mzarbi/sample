@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  broker:
+    build:
+      context: .
+      dockerfile: deployment/docker/Dockerfile.broker
+    ports:
+      - "9090:9090"
+  backend:
+    build:
+      context: .
+      dockerfile: deployment/docker/Dockerfile.backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - BROKER_URL=PYRO:BROKER@broker:9090
+      - GUNICORN_WORKERS=4
+    depends_on:
+      - broker
+
+  nginx:
+    build:
+      context: .
+      dockerfile: deployment/docker/Dockerfile.nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

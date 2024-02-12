@@ -1,0 +1,6 @@
+Flask==2.0.1
+Flasgger==0.9.5
+Werkzeug==2.0.1
+Flask-CORS
+Pyro5
+gunicorn==20.0.4

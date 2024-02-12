@@ -1,0 +1,24 @@
+# Dockerfile.backend
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the Python requirements file and the entrypoint script into the container
+COPY ./backend/requirements.txt /app/
+COPY ./backend/gunicorn.sh /app/
+
+# Install any needed packages specified in the requirements file
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Make the entrypoint script executable
+RUN chmod +x gunicorn.sh
+
+# Copy the rest of the backend application into the container
+COPY ./backend /app
+
+# Expose the port Gunicorn will run on
+EXPOSE 5000
+
+# Use the entrypoint script to start Gunicorn
+ENTRYPOINT ["/app/gunicorn.sh"]
